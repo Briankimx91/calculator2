@@ -3,6 +3,7 @@ $(document).ready(clicker);
 let function_key, number_key;
 let count = 0;
 let equation= [''];
+let result;
 
 function clicker(){
     $('.numbers').click(handleNumber);
@@ -17,54 +18,150 @@ function clicker(){
 function handleNumber(){
     $('.row:nth-child(2) > button:first-child').removeClass('allClear').addClass('clear').text('C');
     number_key = $(this).val();
-    for(let i = 0; i < equation.length; i+=2){
-        for(let k = 1; k <= equation.length; k+=2){
-            if(!equation[k]){
-                equation[i] += number_key;
-            } else {
-                equation[k+1] = number_key;
-            }
-        }
+    if(!equation[1]){
+        equation[0]+=number_key;
+    } else {
+        equation[2]+=number_key;
     }
-    equation.join('');
     console.log(equation);
+    if(equation[2] === undefined){
+        $('.screen').text(equation[0]);
+    } else {
+        $('.screen').text(equation[2]);
+    }
 }
 
 function handleOperator(){
-    function_key = $(this).text();
-    for(let i = 0; i < equation.length; i+=2){
-        for(let k = 1; k <= equation.length; k+=2){
-            if(!equation[i]){
-                return;
-            } else {
-                equation[i+1] = function_key;
-            }
+    function_key = $(this).val();
+    if(!equation[0]){
+        return;
+    } else {
+        doMath();
+        if(equation[2] === undefined){
+            equation[1] = function_key;
+            equation[2] = '';
+        } else {
+            equation[1] = function_key;
         }
+        equation[2] ='';
     }
     console.log(equation);
 }
 function handleEqual(){
-    doMath();
+    for(let i = 1; i < equation.length ;i+=2){
+        if(equation[i+1].length > 0){
+            doMath();
+        } else {
+            if(equation[i] === '*'){
+                result = Number(equation[i - 1]) * Number(equation[i - 1]);
+                equation[i - 1] = Math.round(result * 100) / 100;
+            } else if(equation[i] === '/'){
+                result = Number(equation[i - 1]) / Number(equation[i - 1]);
+                equation[i - 1] = Math.round(result * 100) / 100;
+            } else if(equation[i] === '+'){
+                result = Number(equation[i - 1]) + Number(equation[i - 1]);
+                equation[i - 1] = Math.round(result * 100) / 100;
+            } else {
+                result = Number(equation[i - 1]) - Number(equation[i - 1]);
+                equation[i - 1] = Math.round(result * 100) / 100;
+            }
+        }
+    }
+
     console.log(equation);
+    $('.screen').text(equation[0]);
 }
 function doMath(){
-
+    for(let i = 1; i < equation.length; i+=2){
+        if(equation[i] === '*'){
+            result = Number(equation[i - 1]) * Number(equation[i + 1]);
+            equation[i - 1] = Math.round(result * 100) / 100;
+        } else if(equation[i] === '/'){
+            if(equation[i+1] == 0){
+                equation = [''];
+                console.log("error");
+            } else {
+                result = Number(equation[i - 1]) / Number(equation[i + 1]);
+                equation[i - 1] = Math.round(result * 100) / 100;
+            }
+        } else if(equation[i] === '+') {
+            result = Number(equation[i - 1]) + Number(equation[i + 1]);
+            equation[i - 1] = Math.round(result * 100) / 100;
+        } else if(equation[i] === '-') {
+            result = Number(equation[i - 1]) - Number(equation[i + 1]);
+            equation[i - 1] = Math.round(result * 100) / 100;
+        }
+    }
+    console.log(equation);
 }
 function clear(){
     if($(this).text() === "AC"){
         equation = [''];
     } else {
-        equation.pop();
+        if(equation[2] !== undefined){
+            if(equation[2].length === 0){
+                equation = ['']
+            } else {
+                equation[2] = '';
+            }
+        } else {
+            equation = [''];
+        }
     }
     $('.row:nth-child(2) > button:first-child').removeClass('clear').addClass('allClear').text('AC');
     console.log(equation);
+    $('.screen').text("0");
 }
 function posNeg(){
+    if(equation[2] === undefined || equation[2].length === 0){
+        if(Number(equation[0]) > 0){
+            equation[0] = `-${equation[0]}`;
+        } else {
+            equation[0] = equation[0].substr(1);
+        }
+    } else {
+        if(Number(equation[2]) > 0){
+            equation[2] = `-${equation[2]}`;
+        } else {
+            equation[2] = equation[2].substr(1);
+        }
+    }
     console.log(equation);
+    if(equation[2] === undefined){
+        $('.screen').text(equation[0]);
+    } else {
+        $('.screen').text(equation[2]);
+    }
 }
 function handlePercentage(){
+    if(equation[0].length === 0){
+        return;
+    } else if(equation[0].length > 0 && equation[2] === undefined || equation[2].length === 0){
+        equation[0] = Number(equation[0]) / 100;
+    } else {
+        equation[2] = Number(equation[2]) / 100;
+    }
     console.log(equation);
-}
+    if(equation[2] === undefined){
+        $('.screen').text(equation[0]);
+    } else {
+        $('.screen').text(equation[2]);
+    }}
 function handleDecimal() {
+    const decimal = $(this).val();
+    if(equation[2] === undefined || equation[2].length === 0){
+        if(equation[0].indexOf('.') !== -1){
+            return;
+        } else {
+            equation[0] += decimal;
+        }
+    } else {
+        if(equation[2].indexOf('.') !== -1){
+            return;
+        } else {
+            equation[2] += decimal;
+        }
+    }
     console.log(equation);
+    $('.screen').text(decimal);
 }

@@ -15,15 +15,15 @@ function domElements(){
     for(let i = 1; i < 4; i++){
         $('<button>').appendTo('.row:nth-child(5)').addClass("numbers").text(i).attr("value",i);
     }
-    $('<div>').addClass("screen").appendTo('.row:first-child');
+    $('<div>').addClass("screen").text("0").appendTo('.row:first-child');
     $("<button>").addClass("allClear").text("AC").appendTo('.row:nth-child(2)');
     $("<button>").addClass("pos_neg").text("+/-").appendTo('.row:nth-child(2)');
     $("<button>").addClass("percentage").text("%").appendTo('.row:nth-child(2)');
     $('<button>').text("0").attr("value","0").addClass("zero numbers").appendTo('.row:nth-child(6)');
     $('<button>').text(".").attr('value','.').addClass("decimal").appendTo('.row:nth-child(6)');
-    $('<button>').text("+").addClass("operator").appendTo('.row:nth-child(5)');
-    $('<button>').text("-").addClass("operator").appendTo('.row:nth-child(4)');
-    $('<button>').text("*").addClass("operator").appendTo('.row:nth-child(3)');
-    $('<button>').text("/").addClass("operator").appendTo('.row:nth-child(2)');
+    $('<button>').text("+").attr("value",'+').addClass("operator").appendTo('.row:nth-child(5)');
+    $('<button>').text("-").attr("value",'-').addClass("operator").appendTo('.row:nth-child(4)');
+    $('<button>').text("\u00d7").attr("value",'*').addClass("operator").appendTo('.row:nth-child(3)');
+    $('<button>').text("\u00f7").attr("value",'/').addClass("operator").appendTo('.row:nth-child(2)');
     $('<button>').text("=").addClass("equal").appendTo('.row:nth-child(6)');
 }
