@@ -6,7 +6,7 @@ body {
 button {
     height: 100%;
     width: 25%;
-    font-size: 25px;
+    font-size: 30px;
 }
 
 .calculator {
@@ -15,10 +15,12 @@ button {
 
 .equal{
     background-color:orange;
+    color:white;
 }
 
 .operator{
     background-color:orange !important;
+    color:white;
 }
 
 .row{
@@ -47,4 +49,6 @@ button {
 
 .zero {
     width: 50%;
+    text-align: inherit;
+    padding-left: 22px;
 }

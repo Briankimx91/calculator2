@@ -17,12 +17,22 @@ function clicker(){
 
 function handleNumber(){
     $('.row:nth-child(2) > button:first-child').removeClass('allClear').addClass('clear').text('C');
+    if(equation[0] === "Error!"){
+        equation = [''];
+    }
     number_key = $(this).val();
     if(!equation[1]){
+        if(equation[0].length > 6){
+            return;
+        }
         equation[0]+=number_key;
     } else {
+        if(equation[2].length > 6){
+            return;
+        }
         equation[2]+=number_key;
     }
+
     console.log(equation);
     if(equation[2] === undefined){
         $('.screen').text(equation[0]);
@@ -32,6 +42,9 @@ function handleNumber(){
 }
 
 function handleOperator(){
+    if(equation[0] === "Error!"){
+        return;
+    }
     function_key = $(this).val();
     if(!equation[0]){
         return;
@@ -52,10 +65,10 @@ function handleEqual(){
         if(equation[i+1].length > 0){
             doMath();
         } else {
-            if(equation[i] === '*'){
+            if(equation[i] === '\u00d7'){
                 result = Number(equation[i - 1]) * Number(equation[i - 1]);
                 equation[i - 1] = Math.round(result * 100) / 100;
-            } else if(equation[i] === '/'){
+            } else if(equation[i] === '\u00f7'){
                 result = Number(equation[i - 1]) / Number(equation[i - 1]);
                 equation[i - 1] = Math.round(result * 100) / 100;
             } else if(equation[i] === '+'){
@@ -67,19 +80,19 @@ function handleEqual(){
             }
         }
     }
-
     console.log(equation);
+
     $('.screen').text(equation[0]);
 }
+
 function doMath(){
     for(let i = 1; i < equation.length; i+=2){
-        if(equation[i] === '*'){
+        if(equation[i] === '\u00d7'){
             result = Number(equation[i - 1]) * Number(equation[i + 1]);
             equation[i - 1] = Math.round(result * 100) / 100;
-        } else if(equation[i] === '/'){
-            if(equation[i+1] == 0){
-                equation = [''];
-                console.log("error");
+        } else if(equation[i] === '\u00f7'){
+            if(equation[i+1] === "0"){
+                equation = ['Error!'];
             } else {
                 result = Number(equation[i - 1]) / Number(equation[i + 1]);
                 equation[i - 1] = Math.round(result * 100) / 100;
@@ -149,19 +162,31 @@ function handlePercentage(){
     }}
 function handleDecimal() {
     const decimal = $(this).val();
-    if(equation[2] === undefined || equation[2].length === 0){
+    if(equation[2] === undefined){
         if(equation[0].indexOf('.') !== -1){
             return;
         } else {
-            equation[0] += decimal;
+            if(equation[0].length === 0){
+                equation[0] += `0${decimal}`;
+            } else {
+                equation[0] += decimal
+            }
         }
     } else {
         if(equation[2].indexOf('.') !== -1){
             return;
         } else {
-            equation[2] += decimal;
+            if(equation[2].length === 0){
+                equation[2] += `0${decimal}`;
+            } else {
+                equation[2] += decimal
+            }
         }
     }
     console.log(equation);
-    $('.screen').text(decimal);
+    if(equation[2] === undefined){
+        $('.screen').text(equation[0]);
+    } else {
+        $('.screen').text(equation[2]);
+    }
 }

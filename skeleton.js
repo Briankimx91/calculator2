@@ -23,7 +23,7 @@ function domElements(){
     $('<button>').text(".").attr('value','.').addClass("decimal").appendTo('.row:nth-child(6)');
     $('<button>').text("+").attr("value",'+').addClass("operator").appendTo('.row:nth-child(5)');
     $('<button>').text("-").attr("value",'-').addClass("operator").appendTo('.row:nth-child(4)');
-    $('<button>').text("\u00d7").attr("value",'*').addClass("operator").appendTo('.row:nth-child(3)');
-    $('<button>').text("\u00f7").attr("value",'/').addClass("operator").appendTo('.row:nth-child(2)');
+    $('<button>').text("\u00d7").attr("value",'\u00d7').addClass("operator").appendTo('.row:nth-child(3)');
+    $('<button>').text("\u00f7").attr("value",'\u00f7').addClass("operator").appendTo('.row:nth-child(2)');
     $('<button>').text("=").addClass("equal").appendTo('.row:nth-child(6)');
 }
